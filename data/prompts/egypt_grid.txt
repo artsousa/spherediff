@@ -1,0 +1,32 @@
+# phi: elevação (-90=topo, 0=horizonte, +90=base)  
+# theta: azimuth (0=norte, 90=leste, 180=sul, 270=oeste)
+
+# TOPO (polo superior) — 4 direções
+-90 | 0   | A clear desert sky with sun and sparse clouds, aerial view of egypt
+-90 | 90  | A clear desert sky with sun and sparse clouds, aerial view of egypt
+-90 | 180 | A clear desert sky with sun and sparse clouds, aerial view of egypt
+-90 | 270 | A clear desert sky with sun and sparse clouds, aerial view of egypt
+
+# ELEVAÇÃO ALTA — variação por azimuth
+-10 | 0   | Great pyramids of Giza rising from the desert, north view, golden hour
+-10 | 90  | The Nile river winding through the desert landscape, east view
+-10 | 180 | Ancient Egyptian ruins and smaller pyramids, south view, dusty haze
+-10 | 270 | Vast Sahara desert with sand dunes, west view, golden light
+
+# HORIZONTE — maior detalhe semântico
+0  | 0   | Ground level view of the Great Pyramid of Giza, massive stone blocks, tourists
+0  | 90  | The Nile riverbank with palm trees and ancient boats, lush green strip
+0  | 180 | Sand-stone ruins of ancient temples, hieroglyphs visible on walls
+0  | 270 | Open desert with camel caravan in the distance, heat shimmer
+
+# ELEVAÇÃO BAIXA
+10 | 0   | Sandy desert ground with scattered rocks and pebbles, north ground
+10 | 90  | Nile mud and reeds at water's edge, east ground
+10 | 180 | Ancient stone floor of ruins, south ground, worn sandstone
+10 | 270 | Cracked desert earth, dry and sun-bleached, west ground
+
+# BASE (polo inferior) — chão
+90 | 0   | Close-up of Egyptian desert sand and small stones, ground texture
+90 | 90  | Close-up of Egyptian desert sand and small stones, ground texture
+90 | 180 | Close-up of Egyptian desert sand and small stones, ground texture
+90 | 270 | Close-up of Egyptian desert sand and small stones, ground texture

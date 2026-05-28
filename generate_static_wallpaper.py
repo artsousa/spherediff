@@ -1,5 +1,7 @@
 import argparse
+import logging
 import os
+import time
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -9,6 +11,9 @@ from omegaconf import OmegaConf
 from tools_mpark.dictaction import DictAction
 
 import pipelines_ours
+
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(name)s %(levelname)s %(message)s")
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -49,6 +54,7 @@ def main(args: TestConfig):
     )
 
     # Create pipeline
+    t0 = time.perf_counter()
     pipeline_cls = getattr(pipelines_ours, args.pipeline_cls)
     additional_pipeline_kwargs = args.additional_pipeline_kwargs if args.additional_pipeline_kwargs else {}
     pipe = pipeline_cls.from_pretrained(
@@ -58,14 +64,15 @@ def main(args: TestConfig):
         torch_dtype=dtype,
         **additional_pipeline_kwargs,
     )
+    logger.debug("[profile] pipeline.from_pretrained: %.2fs", time.perf_counter() - t0)
 
     assert not args.enable_vae_tiling, "enable_vae_tiling is not supported in `SanaPipeline`."
     if args.enable_vae_tiling:
         pipe.enable_vae_tiling() if hasattr(pipe, "enable_vae_tiling") else pipe.vae.enable_tiling()
     if args.enable_model_cpu_offload:
+        t0 = time.perf_counter()
         pipe.enable_model_cpu_offload()
-
-    pipe.to(device, dtype=dtype)
+        logger.debug("[profile] enable_model_cpu_offload: %.2fs", time.perf_counter() - t0)
 
     if pipe.scheduler.config.get('solver_order', 1) > 1:  # (added) cannot use multi-step solver
         print("Warning: solver_order > 1 is not supported. Setting solver_order to 1.")
@@ -77,12 +84,16 @@ def main(args: TestConfig):
         lines = f.readlines()
     args.prompt_to_log = [line.strip() for line in lines]
 
+    t0 = time.perf_counter()
     output = pipe(**call_kwargs)
+    logger.debug("[profile] pipe() total: %.2fs", time.perf_counter() - t0)
 
     filename = args.save_path + f"_{datetime.now().strftime('%Y%m%d-%H%M%S')}.png"
     os.makedirs(os.path.dirname(filename), exist_ok=True)
     image = output.images[0]
+    t0 = time.perf_counter()
     image.save(filename)
+    logger.debug("[profile] image.save: %.2fs", time.perf_counter() - t0)
     print(f"Saved image to {filename}")
 
 

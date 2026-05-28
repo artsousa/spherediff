@@ -1,0 +1,37 @@
+# phi: elevation (-90=top, 0=horizon, +90=bottom)
+# theta: azimuth (0=north, 90=east, 180=south, 270=west)
+#
+# Scene: Prise de la Bastille, July 14 1789, Paris.
+# Camera positioned in the Place de la Bastille, at ground level.
+# The fortress gate faces north. The crowd surges from the south.
+# East flank: cannon battery and smoke. West flank: barricades and burning buildings.
+
+# TOP — smoke and fire fill the sky
+-90 | 0   | Dramatic sky over Paris 1789, thick black and grey smoke billowing from cannon fire, orange glow of flames below, chaotic storm clouds
+-90 | 90  | Dramatic sky over Paris 1789, thick black and grey smoke billowing from cannon fire, orange glow of flames below, chaotic storm clouds
+-90 | 180 | Dramatic sky over Paris 1789, thick black and grey smoke billowing from cannon fire, orange glow of flames below, chaotic storm clouds
+-90 | 270 | Dramatic sky over Paris 1789, thick black and grey smoke billowing from cannon fire, orange glow of flames below, chaotic storm clouds
+
+# HIGH ELEVATION — looking down from smoke level
+-10 | 0   | Aerial view of the Bastille fortress north towers, thick stone walls and battlements, dense crowd pressing against the main gate below
+-10 | 90  | Aerial view of the east courtyard of the Bastille, cannon battery in position, soldiers and revolutionaries in close combat, smoke rising
+-10 | 180 | Aerial view of the Rue Saint-Antoine south of the Bastille, massive crowd of Parisian revolutionaries surging forward, torches and pikes
+-10 | 270 | Aerial view of the west side of Place de la Bastille, burning buildings and overturned carts forming barricades, smoke and orange flames
+
+# HORIZON — main semantic layer
+0  | 0   | The Bastille main gate and drawbridge, massive grey stone towers, iron chains, revolutionaries breaching the entrance with pikes and muskets, dramatic lighting
+0  | 90  | East wall of the Bastille fortress under siege, cannon firing at stone walls, explosion debris, soldiers in 18th century uniform defending battlements
+0  | 180 | Enormous crowd of French revolutionaries storming from Rue Saint-Antoine, men and women wielding scythes pikes and muskets, tattered clothing, fury and determination
+0  | 270 | West side of the Place de la Bastille, burning wooden barricades, revolutionary mob with torches, one building fully engulfed in flames, cobblestone street chaos
+
+# LOW ELEVATION — ground detail
+10 | 0   | Cobblestone ground in front of the Bastille gate, scattered cannonballs, broken chains, blood and mud, fallen soldiers in 18th century uniform
+10 | 90  | East ground near cannon battery, spent powder charges and cannon balls, mud churned by boots, discarded muskets and bayonets
+10 | 180 | South cobblestone street, trampled ground, dropped weapons, torn revolutionary tricolor cockades, overturned produce carts
+10 | 270 | West cobblestone ground, charred wood from burning barricades, broken glass and rubble, scattered pamphlets and revolutionary placards
+
+# BOTTOM — ground texture underfoot
+90 | 0   | Close-up of Paris cobblestones 1789, dark grey stone, mud, spent musket balls, scattered straw, worn and chaotic
+90 | 90  | Close-up of Paris cobblestones 1789, dark grey stone, mud, spent musket balls, scattered straw, worn and chaotic
+90 | 180 | Close-up of Paris cobblestones 1789, dark grey stone, mud, spent musket balls, scattered straw, worn and chaotic
+90 | 270 | Close-up of Paris cobblestones 1789, dark grey stone, mud, spent musket balls, scattered straw, worn and chaotic

@@ -529,6 +529,58 @@ class SphericalFunctions:
         indices = indices.squeeze(-1)
         fovs = [prompt_fovs[idx] for idx in indices]
         return indices, fovs
+    
+    @staticmethod
+    def get_prompt_indices_geodesic(
+        view_dir: torch.Tensor,       # (N_views, 3) direções das views
+        prompt_dir: torch.Tensor,     # (N_prompts, 3) direções dos prompts
+        prompt_fovs: list,            # lista de (fov_h, fov_w)
+        top_k: int = 3,              # quantos prompts misturar por view
+        temperature: float = 0.15,   # controla suavidade da mistura
+    ):
+        """
+        Versão geodésica do get_prompt_indices.
+        
+        Ao invés de retornar o índice do prompt mais próximo (hard assignment),
+        retorna os top_k prompts mais próximos com pesos softmax baseados
+        na distância geodésica. Isso produz transições suaves entre regiões.
+        
+        Retorna:
+            prompt_assignments: lista de (indices_tensor, weights_tensor) por view
+            fovs: lista de fovs (igual ao original)
+        """
+        # Normaliza as direções para garantir que são vetores unitários
+        view_dir_norm = view_dir / (view_dir.norm(dim=-1, keepdim=True) + 1e-8)
+        prompt_dir_norm = prompt_dir / (prompt_dir.norm(dim=-1, keepdim=True) + 1e-8)
+
+        # Distância geodésica = arccos(dot product) para vetores unitários
+        # cos_sim: (N_views, N_prompts)
+        cos_sim = torch.einsum('nd,md->nm', view_dir_norm, prompt_dir_norm).clamp(-1 + 1e-6, 1 - 1e-6)
+        geodesic_dist = torch.acos(cos_sim)  # em radianos, (N_views, N_prompts)
+
+        prompt_assignments = []
+        fovs = []
+
+        for i in range(len(view_dir)):
+            dists = geodesic_dist[i]  # (N_prompts,)
+
+            # Pega os top_k prompts mais próximos
+            k = min(top_k, len(dists))
+            top_dists, top_indices = torch.topk(dists, k, largest=False)
+
+            # Pesos softmax pela distância negativa (mais perto = mais peso)
+            weights = torch.softmax(-top_dists / temperature, dim=0)
+
+            prompt_assignments.append((top_indices, weights))
+
+            # FOV: usa o do prompt mais próximo (índice 0 é o mais próximo)
+            closest_idx = top_indices[0].item()
+            if closest_idx < len(prompt_fovs):
+                fovs.append(prompt_fovs[closest_idx])
+            else:
+                fovs.append((80, 80))
+
+        return prompt_assignments, fovs
 
     @staticmethod
     def get_height_width_from_fov(fov, num_points_on_sphere=2600):  # used
